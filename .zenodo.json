@@ -1,0 +1,37 @@
+{
+    "title": "IndicatorBuilder",
+    "description": "Effortlessly generate indicator calculation script templates using 'IndicatorBuilder'. This web tool reads a CSV file, where each column represents an indicator by including its respective definition codes, and outputs a script template ready to be copied and used in R or Python. You can streamline your data analysis workflow with 'IndicatorBuilder'.",
+    "creators": [
+        {
+            "name": "González-Galindo, Javier",
+            "affiliation": "Instituto Aragonés de Ciencias de la Salud (IACS)",
+            "orcid": "0000-0002-8783-5478"
+        },
+        {
+            "name": "Estupiñán-Romero, Francisco",
+            "affiliation": "Instituto Aragonés de Ciencias de la Salud (IACS)",
+            "orcid": "0000-0002-6285-8120"
+        },
+        {
+            "name": "Royo-Sierra, Santiago",
+            "affiliation": "Instituto Aragonés de Ciencias de la Salud (IACS)",
+            "orcid": "0000-0002-0048-4370"
+        },
+        {
+            "name": " Ridao-López, Manuel",
+            "affiliation": "Instituto Aragonés de Ciencias de la Salud (IACS)",
+            "id": "0000-0001-7837-5759"
+        },
+        {
+            "name": "Bernal-Delgado, Enrique (Investigador Principal)",
+            "affiliation": "Instituto Aragonés de Ciencias de la Salud (IACS)",
+            "orcid": "0000-0002-0961-3298"
+        }
+        
+    ],
+    "keywords": [
+        "Web tool",
+        "R script generation",
+        "Python script generation"
+    ]
+}
