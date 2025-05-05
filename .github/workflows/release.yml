@@ -18,7 +18,7 @@ jobs:
           version: 1.6.36
 
       - name: Install r-wasm/quarto-live extension
-        run: quarto add r-wasm/quarto-live
+        run: quarto add --no-prompt r-wasm/quarto-live
 
       - name: Render Quarto document
         run: quarto render index.qmd
