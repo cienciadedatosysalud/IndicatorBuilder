@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/977936033.svg)](https://doi.org/10.5281/zenodo.15343183)
+
 # IndicatorBuilder
 
 Effortlessly generate indicator calculation script templates using 'IndicatorBuilder'. This web tool reads a CSV file, where each column represents an indicator by including its respective definition codes, and outputs a script template ready to be copied and used in R or Python. You can streamline your data analysis workflow with 'IndicatorBuilder'.
