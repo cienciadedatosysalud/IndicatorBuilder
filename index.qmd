@@ -1,0 +1,172 @@
+---
+title: "IndicatorBuilder"
+lang: en
+author:
+  - name:  "[Ciencia de datos para la Investigación en Servicios y Políticas de Salud](https://cienciadedatosysalud.org/)"
+    affiliations:
+      - name: Instituto Aragonés de Ciencias de la Salud (IACS)
+engine: knitr
+format: 
+  live-html:
+    embed-resources: true
+    highlight-style: pygments
+    code-fold: true
+    code-copy: true
+    html-math-method: katex
+    grid:
+      body-width: 1700px
+
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+
+
+<style>
+
+
+
+form.oi-3a86ea {
+    flex-wrap: nowrap;
+    width: 80%;
+    max-width: 100%;
+    margin: initial;
+}
+
+.oi-3a86ea label {
+  --label-width: 16%;
+}
+
+
+#oi-3a86ea-1 {
+  validationMessage:"Select file";
+}
+
+</style>
+
+
+**IndicatorBuilder** is an application designed to simplify and automate the generation of code for calculating indicators from structured data in CSV format.
+
+Simply upload your CSV file (comma separated), where each column represents an indicator and contains the necessary codes for its calculation, and the application will automatically generate a ready-to-use script in Python or R. 
+
+This application leverages the libraries developed by the Data Science for Health Services and Policy Research team:
+
+* For the generation of Python scripts, the **IndicPy** library is utilized: [https://github.com/cienciadedatosysalud/IndicPy](https://github.com/cienciadedatosysalud/IndicPy)
+* For the generation of R scripts, the **IndicR** library is utilized: [https://github.com/cienciadedatosysalud/IndicR](https://github.com/cienciadedatosysalud/IndicR)
+<br><br>
+<hr>
+
+```{ojs} 
+//| echo: false
+viewof csvfile = Inputs.file({label: "CSV file:", accept: ".csv", required: true});
+header = csvfile.csv().then(data => data ? Object.keys(data[0]) : []);
+csvFileName = csvfile ? csvfile.name : "";
+
+
+```
+
+
+
+```{ojs}
+//| echo: false
+viewof language = Inputs.radio(["Python", "R"], {label: "Programming Language:", value: "Python"})
+mutable codigo = "No code generated, please import a .csv file.";
+
+```
+
+
+:::: {.columns}
+
+
+<hr>
+
+## Script
+
+```{webr}
+#| echo: false
+#| warning: false
+#| autorun: true
+#| input:
+#|   - header
+#|   - csvFileName
+#|   - language
+#| define: 
+#|  - codigo
+
+generar_codigo_indicadores_r <- function(lista_indicadores,csvFileName) {
+  codigo_generado <- paste0("library(IndicR)\ndefinition_code_df <- read.csv('",csvFileName,"',header=TRUE)\n")
+  codigo_generado <- paste0(codigo_generado, "df <- read.csv('data.csv',header=TRUE)\nunique_id <- NULL\nreng <- IndicR::RuleEngine(df,unique_id )\n\n")
+  contador_indicador <- 1
+
+  for (nombre_indicador in lista_indicadores) {
+    texto_indicador <- paste0(
+      "definition_codes <- definition_code_df$", nombre_indicador, "\n",
+      "# Define the parameters\n",
+      "target_columns <- c()\n",
+      "#filter_columns <-c()\n#lookup_values <-c()\n",
+      "indicator", contador_indicador, " <- IndicR::MatchAny(reng, '", nombre_indicador, "', target_columns, definition_codes)\n",
+      "#indicator", contador_indicador, " <- IndicR::MatchAnyWhere(reng, '", nombre_indicador, "', target_columns, definition_codes,filter_columns,lookup_values)\n\n"
+    )
+    codigo_generado <- paste0(codigo_generado, texto_indicador)
+    contador_indicador <- contador_indicador + 1
+  }
+  
+  num_indicadores <- length(lista_indicadores)
+  nombres_indicadores <- paste0("'indicator", 1:num_indicadores,"'")
+  string_indicadores <- paste(nombres_indicadores, collapse = ", ")
+  string_final <- paste0("list_scenarios <- c(", string_indicadores, ")\n\n")
+  
+  codigo_generado <- paste0(codigo_generado, string_final)
+  codigo_generado <- paste0(codigo_generado,"result <- IndicR::RunIndicators(reng,list_scenarios, append_results = FALSE,only_true_indicators = TRUE)\n")
+
+  return(codigo_generado)
+}
+
+generar_codigo_indicadores_py <- function(lista_indicadores,csvFileName) {
+  codigo_generado <- paste0("import pandas as pd\nfrom IndicPy import RuleEngine, MatchAnyWhere, run_indicators\ndefinition_code_df = pd.read_csv('",csvFileName,"')\n")
+  codigo_generado <- paste0(codigo_generado, "df = pd.read_csv('data.csv')\nunique_id = None\nreng = RuleEngine(df, unique_id)\n\n")
+  contador_indicador <- 1
+
+  for (nombre_indicador in lista_indicadores) {
+    texto_indicador <- paste0(
+      "definition_codes = definition_code_df['", nombre_indicador, "'].tolist()\n",
+      "# Define the parameters\n",
+      "target_columns = []\n",
+      "#filter_columns =[]\n#lookup_values=[]\n",
+      "indicator", contador_indicador, " = MatchAny(reng, '", nombre_indicador, "', target_columns, definition_codes)\n",
+      "#indicator", contador_indicador, " = MatchAnyWhere(reng, '", nombre_indicador, "', target_columns, definition_codes, filter_columns,lookup_values)\n\n"
+    )
+    codigo_generado <- paste0(codigo_generado, texto_indicador)
+    contador_indicador <- contador_indicador + 1
+  }
+  
+  num_indicadores <- length(lista_indicadores)
+  nombres_indicadores <- paste0("'indicator", 1:num_indicadores,"'")
+  string_indicadores <- paste(nombres_indicadores, collapse = ", ")
+  string_final <- paste0("list_scenarios = [", string_indicadores, "]\n\n")
+  
+  codigo_generado <- paste0(codigo_generado, string_final)
+  codigo_generado <- paste0(codigo_generado,"result = run_indicators(reng,list_scenarios, append_results = FALSE,only_true_indicators = TRUE)\n")
+
+  return(codigo_generado)
+}
+
+if(language == "R"){
+  codigo <- generar_codigo_indicadores_r(header,csvFileName)
+}else{
+  codigo <- generar_codigo_indicadores_py(header,csvFileName)
+}
+
+
+
+
+
+```
+
+
+```r
+
+${codigo}
+
+```
+
