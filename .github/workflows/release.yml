@@ -1,0 +1,36 @@
+name: Publish Quarto to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main # O la rama donde tienes tu documento .qmd
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: latest # O especifica una versión
+
+      - name: Install r-wasm/quarto-live extension
+        run: quarto add r-wasm/quarto-live
+
+      - name: Render Quarto document
+        run: quarto render index.qmd
+
+      - name: Create docs directory
+        run: mkdir -p docs
+
+      - name: Move HTML to docs
+        run: mv index.html docs/index.html
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
