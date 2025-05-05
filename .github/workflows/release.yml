@@ -15,7 +15,7 @@ jobs:
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
         with:
-          version: latest # O especifica una versión
+          version: 1.6.36
 
       - name: Install r-wasm/quarto-live extension
         run: quarto add r-wasm/quarto-live
