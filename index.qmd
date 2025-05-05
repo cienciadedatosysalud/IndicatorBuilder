@@ -123,7 +123,7 @@ generar_codigo_indicadores_r <- function(lista_indicadores,csvFileName) {
 }
 
 generar_codigo_indicadores_py <- function(lista_indicadores,csvFileName) {
-  codigo_generado <- paste0("import pandas as pd\nfrom IndicPy import RuleEngine, MatchAnyWhere, run_indicators\ndefinition_code_df = pd.read_csv('",csvFileName,"')\n")
+  codigo_generado <- paste0("import pandas as pd\nfrom indicpy4health import RuleEngine, MatchAnyWhere, run_indicators\ndefinition_code_df = pd.read_csv('",csvFileName,"')\n")
   codigo_generado <- paste0(codigo_generado, "df = pd.read_csv('data.csv')\nunique_id = None\nreng = RuleEngine(df, unique_id)\n\n")
   contador_indicador <- 1
 
