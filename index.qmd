@@ -51,7 +51,7 @@ Simply upload your CSV file (comma separated), where each column represents an i
 
 This application leverages the libraries developed by the Data Science for Health Services and Policy Research team:
 
-* For the generation of Python scripts, the **IndicPy** library is utilized: [https://github.com/cienciadedatosysalud/IndicPy](https://github.com/cienciadedatosysalud/IndicPy)
+* For the generation of Python scripts, the **IndicPy4Health** library is utilized: [https://github.com/cienciadedatosysalud/IndicPy](https://github.com/cienciadedatosysalud/IndicPy)
 * For the generation of R scripts, the **IndicR** library is utilized: [https://github.com/cienciadedatosysalud/IndicR](https://github.com/cienciadedatosysalud/IndicR)
 <br><br>
 <hr>
