@@ -52,7 +52,7 @@ Simply upload your CSV file (comma separated), where each column represents an i
 This application leverages the libraries developed by the Data Science for Health Services and Policy Research team:
 
 * For the generation of Python scripts, the **IndicPy4Health** library is utilized: [https://github.com/cienciadedatosysalud/IndicPy](https://github.com/cienciadedatosysalud/IndicPy)
-* For the generation of R scripts, the **IndicR** library is utilized: [https://github.com/cienciadedatosysalud/IndicR](https://github.com/cienciadedatosysalud/IndicR)
+* For the generation of R scripts, the **IndicR4Health** library is utilized: [https://github.com/cienciadedatosysalud/IndicR4Health](https://github.com/cienciadedatosysalud/IndicR4Health)
 <br><br>
 <hr>
 
@@ -94,8 +94,8 @@ mutable codigo = "No code generated, please import a .csv file.";
 #|  - codigo
 
 generar_codigo_indicadores_r <- function(lista_indicadores,csvFileName) {
-  codigo_generado <- paste0("library(IndicR)\ndefinition_code_df <- read.csv('",csvFileName,"',header=TRUE)\n")
-  codigo_generado <- paste0(codigo_generado, "df <- read.csv('data.csv',header=TRUE)\nunique_id <- NULL\nreng <- IndicR::RuleEngine(df,unique_id )\n\n")
+  codigo_generado <- paste0("library(IndicR4Health)\ndefinition_code_df <- read.csv('",csvFileName,"',header=TRUE)\n")
+  codigo_generado <- paste0(codigo_generado, "df <- read.csv('data.csv',header=TRUE)\nunique_id <- NULL\nreng <- IndicR4Health::RuleEngine(df,unique_id )\n\n")
   contador_indicador <- 1
 
   for (nombre_indicador in lista_indicadores) {
@@ -104,8 +104,8 @@ generar_codigo_indicadores_r <- function(lista_indicadores,csvFileName) {
       "# Define the parameters\n",
       "target_columns <- c()\n",
       "#filter_columns <-c()\n#lookup_values <-c()\n",
-      "indicator", contador_indicador, " <- IndicR::MatchAny(reng, '", nombre_indicador, "', target_columns, definition_codes)\n",
-      "#indicator", contador_indicador, " <- IndicR::MatchAnyWhere(reng, '", nombre_indicador, "', target_columns, definition_codes,filter_columns,lookup_values)\n\n"
+      "indicator", contador_indicador, " <- IndicR4Health::MatchAny(reng, '", nombre_indicador, "', target_columns, definition_codes)\n",
+      "#indicator", contador_indicador, " <- IndicR4Health::MatchAnyWhere(reng, '", nombre_indicador, "', target_columns, definition_codes,filter_columns,lookup_values)\n\n"
     )
     codigo_generado <- paste0(codigo_generado, texto_indicador)
     contador_indicador <- contador_indicador + 1
@@ -117,7 +117,7 @@ generar_codigo_indicadores_r <- function(lista_indicadores,csvFileName) {
   string_final <- paste0("list_scenarios <- c(", string_indicadores, ")\n\n")
   
   codigo_generado <- paste0(codigo_generado, string_final)
-  codigo_generado <- paste0(codigo_generado,"result <- IndicR::RunIndicators(reng,list_scenarios, append_results = FALSE,only_true_indicators = TRUE)\n")
+  codigo_generado <- paste0(codigo_generado,"result <- IndicR4Health::RunIndicators(reng,list_scenarios, append_results = FALSE,only_true_indicators = TRUE)\n")
 
   return(codigo_generado)
 }
